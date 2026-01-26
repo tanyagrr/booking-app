@@ -1,13 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
-import api from "../../api/client";
+import fetchHotelsServer from '../../../api/hotels/hotels';
 
-
-async function fetchHotelsServer() {
-  const response = await api.get("/hotels");
-  return response.data; 
-}
-
-function* fetchHotels(action) {
+export function* fetchHotels(action) {
   try {
     const { destination } = action.payload || {};
     const hotels = yield call(fetchHotelsServer);

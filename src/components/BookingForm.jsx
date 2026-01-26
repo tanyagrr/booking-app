@@ -16,7 +16,7 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import api from "../../api/client";
+import api from "../api/client";
 
 const validate = (values) => {
   const errors = {};
@@ -75,7 +75,7 @@ function BookingForm() {
           isValid,
           setFieldTouched,
         }) => (
-          <Box component="form" onSubmit={handleSubmit} sx={{ p: 2 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ py: 2 }}>
             <Stack spacing={0.75}>
               <Stack direction="row" spacing={2} alignItems="center">
                 <TextField

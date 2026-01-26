@@ -1,6 +1,6 @@
-import { Box, Container, Stack } from "@mui/material";
-import BookingForm from "./BookingForm";
-import HeroText from "./HeroText";
+import { Box, Container } from "@mui/material";
+import BookingForm from "../../components/BookingForm";
+import HeroText from "../../components/HeroText";
 
 function Main() {
   return (
