@@ -25,6 +25,13 @@ const validate = (values) => {
     errors.destination = "Please choose a destination";
   }
 
+  if (values.checkIn && values.checkOut) {
+    // dayjs objects support isBefore()
+    if (values.checkOut.isBefore(values.checkIn, "day")) {
+      errors.checkOut = "Check out can't be earlier than check in";
+    }
+  }
+
   return errors;
 };
 
@@ -152,7 +159,17 @@ function BookingForm() {
                   disablePast
                   label="Check in"
                   value={values.checkIn}
-                  onChange={(newValue) => setFieldValue("checkIn", newValue)}
+                  onChange={(newValue) => {
+                    setFieldValue("checkIn", newValue);
+
+                    if (
+                      values.checkOut &&
+                      newValue &&
+                      values.checkOut.isBefore(newValue, "day")
+                    ) {
+                      setFieldValue("checkOut", null);
+                    }
+                  }}
                   slots={{ openPickerIcon: CalendarMonthIcon }}
                   slotProps={{
                     textField: {
@@ -182,6 +199,10 @@ function BookingForm() {
                   disablePast
                   label="Check out"
                   value={values.checkOut}
+                  minDate={
+                    values.checkIn ? values.checkIn.add(1, "day") : undefined
+                  }
+                  disabled={!values.checkIn}
                   onChange={(newValue) => setFieldValue("checkOut", newValue)}
                   slots={{ openPickerIcon: CalendarMonthIcon }}
                   slotProps={{
