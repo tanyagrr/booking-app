@@ -47,6 +47,11 @@ function BookingForm() {
 
   const navigate = useNavigate();
 
+  const fieldSx = {
+    width: { xs: "100%", md: "auto" },
+    minWidth: { xs: 0, md: "unset" },
+  };
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Formik
@@ -72,49 +77,76 @@ function BookingForm() {
           setFieldValue,
           errors,
           touched,
-          isValid,
           setFieldTouched,
         }) => (
           <Box component="form" onSubmit={handleSubmit} sx={{ py: 2 }}>
             <Stack spacing={0.75}>
-              <Stack direction="row" spacing={2} alignItems="center">
-                <TextField
-                  select
-                  size="small"
-                  name="destination"
-                  value={values.destination}
-                  onChange={handleChange}
-                  onBlur={() => setFieldTouched("destination", true)}
-                  aria-label="Destination"
-                  error={touched.destination && Boolean(errors.destination)}
-                  sx={{
-                    minWidth: 200,
-                    "& .MuiOutlinedInput-root": { borderRadius: 1.5 },
-                  }}
-                  slotProps={{
-                    select: {
-                      displayEmpty: true,
-                      renderValue: (value) =>
-                        value ? (
-                          value
-                        ) : (
-                          <Box
-                            component="span"
-                            sx={{ color: "text.secondary" }}
-                          >
-                            Destination
-                          </Box>
-                        ),
-                    },
-                  }}
-                >
-                  <MenuItem value="">Destination</MenuItem>
-                  {destinations.map((d) => (
-                    <MenuItem key={d.id} value={d.label}>
-                      {d.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
+              <Stack
+                direction={{ xs: "column", md: "row" }}
+                spacing={{ xs: 1.25, md: 0.9 }}
+                alignItems={{ xs: "stretch", md: "center" }}
+                sx={{
+                  display: { xs: "grid", md: "flex" },
+                  gridTemplateColumns: {
+                    xs: "1fr 1fr",
+                    sm: "1fr 1fr",
+                    md: "unset",
+                  },
+                  gap: { xs: 1.25, md: 0.1 },
+                }}
+              >
+                <Box sx={{ gridColumn: { xs: "1 / -1", sm: "auto" } }}>
+                  <TextField
+                    select
+                    size="small"
+                    name="destination"
+                    value={values.destination}
+                    onChange={handleChange}
+                    onBlur={() => setFieldTouched("destination", true)}
+                    aria-label="Destination"
+                    error={touched.destination && Boolean(errors.destination)}
+                    sx={{
+                      ...fieldSx,
+                      minWidth: { xs: 0, md: 200 },
+                      "& .MuiOutlinedInput-root": { borderRadius: 1.5 },
+                    }}
+                    slotProps={{
+                      select: {
+                        displayEmpty: true,
+                        renderValue: (value) =>
+                          value ? (
+                            value
+                          ) : (
+                            <Box
+                              component="span"
+                              sx={{ color: "text.secondary" }}
+                            >
+                              Destination
+                            </Box>
+                          ),
+                      },
+                    }}
+                  >
+                    <MenuItem value="">Destination</MenuItem>
+                    {destinations.map((d) => (
+                      <MenuItem key={d.id} value={d.label}>
+                        {d.label}
+                      </MenuItem>
+                    ))}
+                  </TextField>
+                  {touched.destination && errors.destination && (
+                    <FormHelperText
+                      error
+                      sx={{
+                        ml: 0.5,
+                        mt: 0.5,
+                        display: { xs: "block", md: "none" },
+                      }}
+                    >
+                      {errors.destination}
+                    </FormHelperText>
+                  )}
+                </Box>
 
                 <DatePicker
                   disablePast
@@ -131,10 +163,12 @@ function BookingForm() {
                         e.currentTarget.querySelector("button")?.click();
                       },
                       sx: {
-                        minWidth: 150,
+                        ...fieldSx,
+                        minWidth: { xs: 0, md: 150 },
                         "& .MuiOutlinedInput-root": { borderRadius: 1 },
                         "& input": { cursor: "pointer" },
                       },
+                      fullWidth: { xs: true, md: false },
                     },
                     openPickerIcon: {
                       fontSize: "small",
@@ -159,10 +193,12 @@ function BookingForm() {
                         e.currentTarget.querySelector("button")?.click();
                       },
                       sx: {
-                        minWidth: 150,
+                        ...fieldSx,
+                        minWidth: { xs: 0, md: 150 },
                         "& .MuiOutlinedInput-root": { borderRadius: 1 },
                         "& input": { cursor: "pointer" },
                       },
+                      fullWidth: { xs: true, md: false },
                     },
                     openPickerIcon: {
                       fontSize: "small",
@@ -182,11 +218,12 @@ function BookingForm() {
                   }
                   inputMode="numeric"
                   sx={{
-                    minWidth: 90,
-                    width: 150,
+                    ...fieldSx,
+                    width: { xs: "100%", md: 150 },
                     "& .MuiOutlinedInput-root": { borderRadius: 1.5 },
                     "& input": { textOverflow: "ellipsis" },
                   }}
+                  fullWidth={{ xs: true, md: false }}
                 />
 
                 <TextField
@@ -199,11 +236,12 @@ function BookingForm() {
                   }
                   inputMode="numeric"
                   sx={{
-                    minWidth: 110,
-                    width: 210,
+                    ...fieldSx,
+                    width: { xs: "100%", md: 150 },
                     "& .MuiOutlinedInput-root": { borderRadius: 1.5 },
                     "& input": { textOverflow: "ellipsis" },
                   }}
+                  fullWidth={{ xs: true, md: false }}
                 />
 
                 <Button
@@ -211,8 +249,10 @@ function BookingForm() {
                   variant="contained"
                   sx={{
                     bgcolor: "primary.main",
-                    px: 6,
                     height: 40,
+                    px: { xs: 2, md: 6 },
+                    width: { xs: "100%", md: "auto" },
+                    gridColumn: { xs: "1 / -1", sm: "auto" },
                     "&:hover": { bgcolor: "action.hover" },
                   }}
                 >
@@ -220,7 +260,10 @@ function BookingForm() {
                 </Button>
               </Stack>
               {touched.destination && errors.destination && (
-                <FormHelperText error sx={{ ml: 0.5 }}>
+                <FormHelperText
+                  error
+                  sx={{ ml: 0.5, display: { xs: "none", md: "block" } }}
+                >
                   {errors.destination}
                 </FormHelperText>
               )}
